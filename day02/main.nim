@@ -18,10 +18,10 @@ proc walk(board: seq[string]): string =
     for ch in line:
       var d = moves[ch]
       var n = (pos.x + d.x, pos.y + d.y)
-      if lookup.contains(n):
+      if lookup.contains(n) and lookup[n] != ' ':
         pos = n
 
-    add answer, board[pos.y][pos.x]
+    add answer, lookup[pos]
   answer
 
 let board1 = @["123", "456", "789"]
