@@ -6,20 +6,20 @@ var moves = {'L': (x: -1, y: 0), 'R': (x: 1, y: 0), 'U': (x: 0, y: -1), 'D': (x:
 proc walk(board: seq[string]): string =
   var answer = ""
   var start: Pos
+  var lookup = initTable[Pos, char]()
   for y, line in pairs board:
-    start.x = line.find "5"
-    if start.x != -1:
-      start.y = y
-      break
+    for x, ch in pairs line:
+      lookup[(x,y)] = ch
+      if ch == '5':
+        start = (x, y)
 
   for line in lines "input.txt":
     var pos = start
     for ch in line:
       var d = moves[ch]
-      var nx = pos.x + d.x
-      var ny = pos.y + d.y
-      if nx >= 0 and ny >= 0 and ny < len(board) and nx < len(board[0]) and board[ny][nx] != ' ':
-        pos = (x: nx, y: ny)
+      var n = (pos.x + d.x, pos.y + d.y)
+      if lookup.contains(n):
+        pos = n
 
     add answer, board[pos.y][pos.x]
   answer
