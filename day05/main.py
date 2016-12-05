@@ -5,25 +5,25 @@ def solution1(key):
     answer = ''
     for i in range(0, sys.maxsize):
         x = (key + str(i)).encode('utf8')
-        h = hashlib.md5(x).hexdigest()
-        if h.startswith('00000'):
-            answer += h[5]
+        h = hashlib.md5(x).digest()
+        if h[0] == 0 and h[1] == 0 and (h[2] & 0xf0) == 0:
+            answer += '%x' % h[2]
             if len(answer) == 8:
                 break
     return answer
 
 def solution2(key):
-    answer = [None] * 8
-    needed = set('01234567')
+    answer = ['_'] * 8
+    count = 0
     for i in range(0, sys.maxsize):
         x = (key + str(i)).encode('utf8')
-        h = hashlib.md5(x).hexdigest()
-        if h.startswith('00000'):
-            pos = h[5]
-            if pos in needed:
-                answer[int(pos)] = h[6]
-                needed.remove(pos)
-                if not needed:
+        h = hashlib.md5(x).digest()
+        if h[0] == 0 and h[1] == 0 and (h[2] & 0xf0) == 0:
+            if h[2] < 8 and answer[h[2]] == '_':
+                answer[h[2]] = '%x' % (h[3] >> 4)
+                print(''.join(answer))
+                count += 1
+                if count == 8:
                     break
     return ''.join(answer)
 
