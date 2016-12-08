@@ -8,20 +8,17 @@ def run(width, height, lines):
     s = np.zeros((height, width), dtype=bool)
     answer = 0
     for line in lines:
-        m1 = re.match(r'rect (\d+)x(\d+)', line)
-        m2 = re.match(r'rotate row y=(\d+) by (\d+)', line)
-        m3 = re.match(r'rotate column x=(\d+) by (\d+)', line)
-        if m1:
-            w, h = map(int, m1.groups())
+        p = re.split(r'[ =]', line)
+        if p[0] == 'rect':
+            w, h = map(int, p[1].split('x'))
             s[:h, :w] = True
-        elif m2:
-            cy, n = map(int, m2.groups())
-            s[cy] = np.roll(s[cy], n)
-        elif m3:
-            cx, n = map(int, m3.groups())
-            s[:,cx] = np.roll(s[:,cx], n)
-        else:
-            print("XXX ", line)
+        elif p[0] == 'rotate':
+            if p[1] == 'row':
+                cy, n = int(p[3]), int(p[5])
+                s[cy] = np.roll(s[cy], n)
+            else:
+                cx, n = int(p[3]), int(p[5])
+                s[:,cx] = np.roll(s[:,cx], n)
     return s
 
 # test = run(7, 3, ['rect 3x2', 'rotate column x=1 by 1', 'rotate row y=0 by 4', 'rotate column x=1 by 1'])
