@@ -2,15 +2,13 @@ from collections import deque
 
 n = 3018458
 
-def answer1():
-    elfs = deque(range(n, 0, -1))
-    while len(elfs) > 1:
-        x = elfs.pop()
-        elfs.pop()
-        elfs.appendleft(x)
-    return elfs[0]
+def answer1(n):
+    # From https://en.wikipedia.org/wiki/Josephus_problem:
+    # "The most elegant form of the answer.. can be obtained by a one-bit left cyclic shift of n itself"
+    x = bin(n)
+    return int(x[3:] + x[2], 2)
 
-def answer2():
+def answer2(n):
     left = deque()
     right = deque()
     for i in range(1, n+1):
@@ -29,5 +27,5 @@ def answer2():
         left.append(right.pop())
     return left[0]
 
-print('Answer #1:', answer1())
-print('Answer #2:', answer2())
+print('Answer #1:', answer1(n))
+print('Answer #2:', answer2(n))
