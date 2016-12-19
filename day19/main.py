@@ -1,3 +1,5 @@
+from sortedcontainers import SortedList
+
 def answer1():
     n = 3018458
     elfs = [1 for i in range(n)]
@@ -18,10 +20,10 @@ def answer1():
 
 def answer2():
     n = 3018458
-    elfs = list(range(1, n+1))
+    elfs = SortedList(range(1, n+1))
     i = 0
     for l in range(n, 1, -1):
-        if l % 1000 == 0: print(l)
+        if l % 10000 == 0: print(l)
         h = l//2
         j = (i+h)%l
         # a = elfs[i]
